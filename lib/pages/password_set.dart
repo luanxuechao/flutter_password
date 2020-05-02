@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_password/components/custom_icon.dart';
 
 class PasswordSet extends StatefulWidget {
   @override
@@ -13,11 +14,11 @@ class PasswordSetState extends State<PasswordSet> {
   String _name;
 
   String _password;
+  bool visible =true;
   bool _favourite = false;
   bool _requiredPassword = false;
   void _forSubmitted() {
     var _form = _formKey.currentState;
-
     if (_form.validate()) {
       _form.save();
       print(_name);
@@ -108,16 +109,18 @@ class PasswordSetState extends State<PasswordSet> {
                 decoration: new InputDecoration(
                     labelText: 'Password:',
                     isDense: true,
-                    // suffixIcon: Icon(Icons.update),
                     contentPadding: EdgeInsets.only(top: 5),
-                    // contentPadding:EdgeInsets.all(0),
                     suffix: IconButton(
-                      icon: Icon(Icons.update),
-                      onPressed: () {},
+                      icon: Icon(visible?CustomIcon.NotVisible :CustomIcon.Browse),
+                      onPressed: () {
+                          setState(() {
+                        visible = !visible;
+                        });
+                      },
                       padding: EdgeInsetsDirectional.only(end: 10.0),
                     ),
                     suffixStyle: TextStyle(height: 0.1)),
-                obscureText: true,
+                obscureText: visible,
                 validator: (val) {
                   return val.length < 4 ? "密码长度错误" : null;
                 },
