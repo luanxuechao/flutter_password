@@ -8,8 +8,9 @@ abstract class BaseDBProvider {
   tableName();
 
   tableBaseString(String name, String columnId) {
-    return '''create table $name(
-      $columnId integer primary key autoincrement
+    return '''
+    create table $name(
+      $columnId integer primary key autoincrement,
       ''';
   }
 

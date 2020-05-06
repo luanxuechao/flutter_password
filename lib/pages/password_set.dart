@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_password/components/custom_icon.dart';
+import 'package:flutter_password/models/password.dart';
+import 'package:flutter_password/dao/passwordDao.dart';
 
 class PasswordSet extends StatefulWidget {
   @override
@@ -12,17 +14,59 @@ class PasswordSetState extends State<PasswordSet> {
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   String _name;
-
+  String _url;
+  String _username;
   String _password;
-  bool visible =true;
+  String _notes;
+  bool visible = true;
   bool _favourite = false;
   bool _requiredPassword = false;
-  void _forSubmitted() {
+  _forSubmitted() async {
     var _form = _formKey.currentState;
     if (_form.validate()) {
       _form.save();
-      print(_name);
-      print(_password);
+      int favourite = _favourite ? 1 : 0;
+      int passwordRepormpt = _requiredPassword ? 1 : 0;
+      int updatedAt =
+          ((new DateTime.now()).millisecondsSinceEpoch / 1000).round();
+      PasswordModel pwd = PasswordModel(
+          name: _name,
+          url: _url,
+          username: _username,
+          password: _password,
+          notes: _notes,
+          favourite: favourite,
+          passwordRepormpt: passwordRepormpt,
+          updatedAt: updatedAt);
+      PasswordDao pwdDao = PasswordDao();
+      int ret = await pwdDao.insert(pwd);
+      if (ret > 0) {
+        return showDialog<void>(
+          context: context,
+          barrierDismissible: false, // user must tap button!
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('info'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text('success'),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('comfirm'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                     Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
   }
 
@@ -36,7 +80,7 @@ class PasswordSetState extends State<PasswordSet> {
           IconButton(
             icon: Icon(Icons.done),
             color: Colors.white,
-            onPressed: () => {},
+            onPressed: _forSubmitted,
             tooltip: 'saved',
           ),
           PopupMenuButton(
@@ -79,6 +123,9 @@ class PasswordSetState extends State<PasswordSet> {
                 decoration: new InputDecoration(
                   labelText: 'Name:',
                 ),
+                validator: (val) {
+                  return val.length < 1 ? '名称不能为空' : null;
+                },
                 onSaved: (val) {
                   _name = val;
                 },
@@ -87,11 +134,8 @@ class PasswordSetState extends State<PasswordSet> {
                 decoration: new InputDecoration(
                   labelText: 'URL:',
                 ),
-                validator: (val) {
-                  return val.length < 4 ? "密码长度错误" : null;
-                },
                 onSaved: (val) {
-                  _password = val;
+                  _url = val;
                 },
               ),
               new TextFormField(
@@ -99,10 +143,10 @@ class PasswordSetState extends State<PasswordSet> {
                   labelText: 'Username:',
                 ),
                 validator: (val) {
-                  return val.length < 4 ? "密码长度错误" : null;
+                  return val.length < 1 ? "用户名不能为空" : null;
                 },
                 onSaved: (val) {
-                  _password = val;
+                  _username = val;
                 },
               ),
               new TextFormField(
@@ -111,10 +155,11 @@ class PasswordSetState extends State<PasswordSet> {
                     isDense: true,
                     contentPadding: EdgeInsets.only(top: 5),
                     suffix: IconButton(
-                      icon: Icon(visible?CustomIcon.NotVisible :CustomIcon.Browse),
+                      icon: Icon(
+                          visible ? CustomIcon.NotVisible : CustomIcon.Browse),
                       onPressed: () {
-                          setState(() {
-                        visible = !visible;
+                        setState(() {
+                          visible = !visible;
                         });
                       },
                       padding: EdgeInsetsDirectional.only(end: 10.0),
@@ -122,7 +167,7 @@ class PasswordSetState extends State<PasswordSet> {
                     suffixStyle: TextStyle(height: 0.1)),
                 obscureText: visible,
                 validator: (val) {
-                  return val.length < 4 ? "密码长度错误" : null;
+                  return val.length < 1 ? "密码不能为空" : null;
                 },
                 onSaved: (val) {
                   _password = val;
@@ -132,12 +177,9 @@ class PasswordSetState extends State<PasswordSet> {
                 decoration: new InputDecoration(
                   labelText: 'Notes:',
                 ),
-                validator: (val) {
-                  return val.length < 4 ? "密码长度错误" : null;
-                },
                 maxLines: 3,
                 onSaved: (val) {
-                  _password = val;
+                  _notes = val;
                 },
               ),
               Row(

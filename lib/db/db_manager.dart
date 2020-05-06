@@ -30,7 +30,13 @@ class DBManager {
     await getCurrentDatabase();
     String sql =
         "select * from Sqlite_master where type ='table' and name='$tableName'";
+    // String sql = 'DROP TABLE $tableName;';
     var res = await _database.rawQuery(sql);
+    print(res);
     return res != null && res.length > 0;
+  }
+  static close(){
+    _database?.close();
+    _database =null;
   }
 }
