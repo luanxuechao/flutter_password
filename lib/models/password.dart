@@ -8,7 +8,7 @@ final String columnPasswordRepormpt = 'password_repormpt';
 final String columnupdatedAt = 'updated_at';
 
 class PasswordModel {
-  String id;
+  int id;
   String name;
   String url;
   String username;
@@ -38,7 +38,6 @@ class PasswordModel {
   //   this.updatedAt =  ((new DateTime.now()).millisecondsSinceEpoch/1000).round();
   // }
   Map<String, dynamic> toMap() {
-    print(this.name);
     var map = <String, dynamic>{
       columnName: this.name,
       columnUsername: this.username,

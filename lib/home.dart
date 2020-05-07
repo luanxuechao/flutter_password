@@ -18,10 +18,11 @@ class _MyHomePageState extends State<HomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[PasswordList()],
-        ),
+        // child: Column(
+        //   mainAxisAlignment: MainAxisAlignment.start,
+        //   children: <Widget>[PasswordList()],
+        // ),
+        child: PasswordList(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => {Navigator.pushNamed(context, '/b')},

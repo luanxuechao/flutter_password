@@ -28,10 +28,16 @@ class PasswordDao extends BaseDBProvider {
   }
   Future insert(PasswordModel pwd) async {
     Database db = await getDataBase();
-    print(pwd.toMap());
     int i  = await db.insert(name, pwd.toMap());
-     print(111111);
-    print(i);
     return i;
+  }
+  Future<List<PasswordModel>> findAll() async {
+    Database db = await getDataBase();
+    List<Map<String,dynamic>> maps = await db.query(name);
+    if(maps.length >0){
+      List<PasswordModel> pwdList = maps.map((item)=>PasswordModel.fromMap(item)).toList();
+      return pwdList;
+    }
+    return null;
   }
 }
