@@ -59,7 +59,8 @@ class PasswordSetState extends State<PasswordSet> {
                   child: Text('comfirm'),
                   onPressed: () {
                     Navigator.of(context).pop();
-                     Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
+                    Navigator.pop(context,"");
                   },
                 ),
               ],
