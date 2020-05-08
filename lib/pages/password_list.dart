@@ -134,15 +134,6 @@ class ListItem extends StatelessWidget {
             ),
           ),
         ),
-        // child: ListTile(
-        // 	leading: CircleAvatar(
-        // 		backgroundColor: Colors.indigoAccent,
-        // 		child: Text('A'),
-        // 		foregroundColor: Colors.white,
-        // 	),
-        // 	title: Text(pwd.name),
-        // 	subtitle: Text('SlidableDrawerDelegate'),
-        // ),
       ),
     );
   }
