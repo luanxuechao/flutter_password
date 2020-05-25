@@ -31,6 +31,13 @@ class PasswordDao extends BaseDBProvider {
     int i  = await db.insert(name, pwd.toMap());
     return i;
   }
+  Future deleteById(int id) async {
+    Database db = await getDataBase();
+    int i  = await db.delete(name,where:"id=?",whereArgs: [id]);
+    print('teetstta');
+    print(i);
+    return i;
+  }
   Future<List<PasswordModel>> findAll() async {
     Database db = await getDataBase();
     List<Map<String,dynamic>> maps = await db.query(name);

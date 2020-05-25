@@ -3,7 +3,6 @@ import 'package:flutter_password/components/custom_icon.dart';
 import 'package:flutter_password/models/password.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_password/dao/passwordDao.dart';
-import 'package:bot_toast/bot_toast.dart';
 
 class PasswordList extends StatefulWidget {
   @override
@@ -29,7 +28,7 @@ class PasswordListState extends State<PasswordList> {
   }
 
   _showSnackBar(String action) {
-    BotToast.showSimpleNotification(title: '当前点击按钮：$action');
+    // BotToast.showSimpleNotification(title: '当前点击按钮：$action');
   }
 
   void getData() async {
@@ -41,24 +40,34 @@ class PasswordListState extends State<PasswordList> {
     });
   }
 
+  void deleteData(int id) async {
+    PasswordDao pwdDao = new PasswordDao();
+    await pwdDao.deleteById(id);
+    getData();
+  }
+
   // @override
   Widget build(BuildContext context) {
     if (pwdList == null) {
-      return new Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            CustomIcon.Empty,
-            color: Colors.grey[300],
-            size: 180.0,
-          ),
-        ],
-      );
+      return new Padding(
+          padding: new EdgeInsets.only(top:160),
+          child: new Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Icon(
+                CustomIcon.Empty,
+                color: Colors.grey[300],
+                size: 180.0,
+              ),
+            ],
+          ));
     }
     return new ListView.builder(
       shrinkWrap: true,
       itemCount: pwdList == null ? 0 : pwdList.length,
       itemBuilder: (context, i) => new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           renderItemType(
               pwd: pwdList[i], actionType: SlidableBehindActionPane()),
@@ -86,7 +95,7 @@ class PasswordListState extends State<PasswordList> {
           icon: Icons.delete,
           closeOnTap: false,
           onTap: () {
-            _showSnackBar('Delete');
+            deleteData(pwd.id);
           },
         ),
       ],
