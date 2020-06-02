@@ -26,25 +26,34 @@ class PasswordDao extends BaseDBProvider {
       updated_at INTEGER)
     ''';
   }
+
   Future insert(PasswordModel pwd) async {
     Database db = await getDataBase();
-    int i  = await db.insert(name, pwd.toMap());
+    int i = await db.insert(name, pwd.toMap());
     return i;
   }
+
   Future deleteById(int id) async {
     Database db = await getDataBase();
-    int i  = await db.delete(name,where:"id=?",whereArgs: [id]);
-    print('teetstta');
-    print(i);
+    int i = await db.delete(name, where: "id=?", whereArgs: [id]);
     return i;
   }
+
   Future<List<PasswordModel>> findAll() async {
     Database db = await getDataBase();
-    List<Map<String,dynamic>> maps = await db.query(name);
-    if(maps.length >0){
-      List<PasswordModel> pwdList = maps.map((item)=>PasswordModel.fromMap(item)).toList();
+    List<Map<String, dynamic>> maps = await db.query(name);
+    if (maps.length > 0) {
+      List<PasswordModel> pwdList =
+          maps.map((item) => PasswordModel.fromMap(item)).toList();
       return pwdList;
     }
     return null;
+  }
+
+  Future updateById(int id, PasswordModel pwd) async {
+    Database db = await getDataBase();
+    int i = await db.rawUpdate(
+        '''UPDATE fp_password SET favourite =${pwd.favourite} WHERE id=$id''');
+    return i;
   }
 }

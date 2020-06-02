@@ -46,11 +46,19 @@ class PasswordListState extends State<PasswordList> {
     getData();
   }
 
+  void likeData(PasswordModel pwd) async {
+    PasswordDao pwdDao = new PasswordDao();
+    pwd.favourite = pwd.favourite == 1 ? 0 : 1;
+    PasswordModel updateItem = PasswordModel(favourite:pwd.favourite,);
+    await pwdDao.updateById(pwd.id,updateItem);
+    getData();
+  }
+
   // @override
   Widget build(BuildContext context) {
     if (pwdList == null) {
       return new Padding(
-          padding: new EdgeInsets.only(top:160),
+          padding: new EdgeInsets.only(top: 160),
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,10 +92,14 @@ class PasswordListState extends State<PasswordList> {
       secondaryActions: <Widget>[
         //右侧按钮列表r
         IconSlideAction(
-          caption: 'Like',
+          caption: pwd.favourite == 1 ? 'UnLike': 'Like',
           color: Theme.of(context).primaryColor,
-          icon: Icons.favorite_border,
-          onTap: () => _showSnackBar('Like'),
+          icon: pwd.favourite == 1 ? Icons.favorite : Icons.favorite_border,
+          onTap: () {
+            likeData(pwd);
+             setState(() {
+            });
+          },
         ),
         IconSlideAction(
           caption: 'Delete',
@@ -114,7 +126,7 @@ class ListItem extends StatelessWidget {
         Slidable.of(context).close();
       },
       child: Container(
-        color: Colors.white,
+        color: pwd.favourite == 1 ? Colors.grey[200] : Colors.white,
         child: new ListTile(
           leading: new CircleAvatar(
             foregroundColor: Theme.of(context).primaryColor,
@@ -128,10 +140,6 @@ class ListItem extends StatelessWidget {
               new Text(
                 pwd.name,
                 style: new TextStyle(fontWeight: FontWeight.bold),
-              ),
-              new Text(
-                pwd.password,
-                style: new TextStyle(color: Colors.grey, fontSize: 14.0),
               ),
             ],
           ),
