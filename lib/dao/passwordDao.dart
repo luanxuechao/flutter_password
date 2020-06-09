@@ -41,7 +41,7 @@ class PasswordDao extends BaseDBProvider {
 
   Future<List<PasswordModel>> findAll() async {
     Database db = await getDataBase();
-    List<Map<String, dynamic>> maps = await db.query(name);
+    List<Map<String, dynamic>> maps = await db.query(name,orderBy: 'favourite desc');
     if (maps.length > 0) {
       List<PasswordModel> pwdList =
           maps.map((item) => PasswordModel.fromMap(item)).toList();
