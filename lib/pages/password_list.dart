@@ -1,4 +1,6 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_password/components/custom_icon.dart';
 import 'package:flutter_password/models/password.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -10,6 +12,8 @@ class PasswordList extends StatefulWidget {
     return new PasswordListState();
   }
 }
+
+
 
 class PasswordListState extends State<PasswordList> {
   List<PasswordModel> pwdList = null;
@@ -27,9 +31,7 @@ class PasswordListState extends State<PasswordList> {
     getData();
   }
 
-  _showSnackBar(String action) {
-    // BotToast.showSimpleNotification(title: '当前点击按钮：$action');
-  }
+
 
   void getData() async {
     PasswordDao pwdDao = new PasswordDao();
@@ -165,110 +167,116 @@ class ListItem extends StatelessWidget {
   }
 
   Widget sheetMenu({BuildContext context, PasswordModel pwd}) {
+     _showSnackBar(String text) {
+    BotToast.showSimpleNotification(title: text);
+  }
     return Container(
       height: 300,
       color: Colors.white,
       child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                print('edit');
-              },
-              child: new Container(
-                child: new ListTile(
-                  leading: new Icon(Icons.trending_flat),
-                  title: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      new Text(
-                        'View',
-                      ),
-                    ],
-                  ),
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          GestureDetector(
+            onTap: () {
+              print('edit');
+            },
+            child: new Container(
+              child: new ListTile(
+                leading: new Icon(Icons.trending_flat),
+                title: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    new Text(
+                      'View',
+                    ),
+                  ],
                 ),
               ),
             ),
-             GestureDetector(
-              onTap: () {
-                print('edit');
-              },
-              child: new Container(
-                child: new ListTile(
-                  leading: new Icon(Icons.edit),
-                  title: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      new Text(
-                        'Edit',
-                      ),
-                    ],
-                  ),
+          ),
+          GestureDetector(
+            onTap: () {
+              print('edit');
+            },
+            child: new Container(
+              child: new ListTile(
+                leading: new Icon(Icons.edit),
+                title: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    new Text(
+                      'Edit',
+                    ),
+                  ],
                 ),
               ),
             ),
-             GestureDetector(
-              onTap: () {
-                print('edit');
-              },
-              child: new Container(
-                child: new ListTile(
-                  leading: new Icon(Icons.visibility),
-                  title: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      new Text(
-                        'Show Password',
-                      ),
-                    ],
-                  ),
+          ),
+          GestureDetector(
+            onTap: () {
+              print('edit');
+            },
+            child: new Container(
+              child: new ListTile(
+                leading: new Icon(Icons.visibility),
+                title: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    new Text(
+                      'Show Password',
+                    ),
+                  ],
                 ),
               ),
             ),
-             GestureDetector(
-              onTap: () {
-                print('edit');
-              },
-              child: new Container(
-                child: new ListTile(
-                  leading: new Icon(Icons.content_copy),
-                  title: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      new Text(
-                        'Copy Password',
-                      ),
-                    ],
-                  ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Clipboard.setData(new ClipboardData(text: pwd.password));
+              BotToast.showText(text:"xxxx");
+              Navigator.pop(context);
+            },
+            child: new Container(
+              child: new ListTile(
+                leading: new Icon(Icons.content_copy),
+                title: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    new Text(
+                      'Copy Password',
+                    ),
+                  ],
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                print('edit');
-              },
-              child: new Container(
-                child: new ListTile(
-                  leading: new Icon(Icons.folder_shared),
-                  title: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      new Text(
-                        'Copy Username',
-                      ),
-                    ],
-                  ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Clipboard.setData(new ClipboardData(text: pwd.username));
+              Navigator.pop(context);
+            },
+            child: new Container(
+              child: new ListTile(
+                leading: new Icon(Icons.folder_shared),
+                title: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    new Text(
+                      'Copy Username',
+                    ),
+                  ],
                 ),
               ),
-            )
-            // const Text('Modal BottomSheet'),
-            // RaisedButton(
-            //   child: const Text('Close BottomSheet'),
-            //   onPressed: () => Navigator.pop(context),
-            // )
-          ],
-        ),
+            ),
+          )
+          // const Text('Modal BottomSheet'),
+          // RaisedButton(
+          //   child: const Text('Close BottomSheet'),
+          //   onPressed: () => Navigator.pop(context),
+          // )
+        ],
+      ),
     );
   }
 }
