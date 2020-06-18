@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_password/components/custom_icon.dart';
 import 'package:flutter_password/models/password.dart';
 import 'package:flutter_password/dao/passwordDao.dart';
-
 class PasswordSet extends StatefulWidget {
   @override
   PasswordSetState createState() {

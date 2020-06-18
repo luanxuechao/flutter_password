@@ -25,7 +25,7 @@ class _MyHomePageState extends State<HomePage> {
         // child: PasswordList(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {Navigator.pushNamed(context, '/b')},
+        onPressed: () => {Navigator.pushNamed(context, '/password-set')},
         backgroundColor: Theme.of(context).accentColor,
         tooltip: 'Increment',
         child: Icon(
